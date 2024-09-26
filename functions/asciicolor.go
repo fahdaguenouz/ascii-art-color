@@ -72,3 +72,41 @@ func GenerateASCIIArt(input string, asciiArt []string) (string) {
 
 	return result
 }
+func GenerateASCIIArtLetter(input string, asciiArt []string, targetWord string, colorCode string, resetCode string) string {
+	var result string
+	lines := strings.Split(input, "\\n")
+
+	for _, line := range lines {
+		if line == "" {
+			result += "\n"
+			continue
+		}
+		for i := 1; i <= 8; i++ { // 8 lines per letter in the ASCII art
+			// Split the input line into words to match full words
+			words := strings.Fields(line)
+
+			for _, word := range words {
+				for _, r := range word {
+					if r < 32 || r > 126 {
+						fmt.Printf("invalid character: please enter a valid character between ASCII code 32 and 126")
+						return ""
+					}
+					index := 9*(int(r)-32) + i
+
+					// Check if the current word matches the target word
+					if word == targetWord {
+						// Apply the color to the entire word in ASCII art
+						result += colorCode + asciiArt[index] + resetCode
+					} else {
+						result += asciiArt[index] // No color for other words
+					}
+				}
+				result += " " // Add space between words in the result
+			}
+			result += "\n"
+		}
+	}
+
+	return result
+}
+

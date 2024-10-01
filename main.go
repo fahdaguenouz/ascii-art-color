@@ -62,7 +62,7 @@ result := asciiartcolor.GenerateASCIIArt(input, asciiArt)
 
 fmt.Print(colorCode + result + colors["reset"])
 
-	}else if len(args) == 3 {
+	}else if len(args) == 3 && (args[2]=="standard"||args[2]=="thinkertoy"||args[2]=="shadow"){
 	color := args[0]
 	input := args[1]
 	banner := args[2]
@@ -101,7 +101,43 @@ if err != nil {
 result := asciiartcolor.GenerateASCIIArt(input, asciiArt)
 fmt.Print(colorCode + result + colors["reset"])
 
+	}else if len(args) == 3 && (args[2]!="standard"||args[2]!="thinkertoy"||args[2]!="shadow"){
+
+		color := args[0]
+		word:=args[1]
+		input := args[2]
+		banner := "standard"
+		// Validate output option
+		if !strings.HasPrefix(color, "--color=") {
+			fmt.Println("Invalid option. Please use --color= < name of the color >")
+			return
+		}
 	
+		// Validate color name
+		colorname := strings.TrimPrefix(color, "--color=")
+		colorCode, exists := colors[colorname]
+		if !exists {
+			fmt.Println("Usage: go run . [OPTION] [STRING]")
+		fmt.Println("EX: go run . --color=<color> <substring to be colored> 'something'")
+			return
+		}
+		
+	// Get the appropriate ASCII art file
+			artFile, err := asciiartcolor.GetArtFile(banner)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	// Read the ASCII art file
+	asciiArt, err := asciiartcolor.ReadArtFile(artFile)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+// Generate ASCII art for the input string and colorize the target word
+result := asciiartcolor.GenerateASCIIArtLetter(input, asciiArt, word, colorCode, colors["reset"])
+
+fmt.Print(result)
 	}else if len(args) == 4{
 		color := args[0]
 		word:=args[1]

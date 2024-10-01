@@ -26,14 +26,50 @@ func main() {
 	"reset" : "\033[0m" ,
 	}
 
+if len(args) == 2 {
+	color := args[0]
+		input := args[1]
+		banner := "standard"
+		// Validate output option
+		if !strings.HasPrefix(color, "--color=") {
+			fmt.Println("Usage: go run . [OPTION] [STRING]")
+		fmt.Println("EX: go run . --color=<color> <substring to be colored> 'something'")
+			return
+		}
+		// Validate color name
+		colorname := strings.TrimPrefix(color, "--color=")
+		colorCode, exists := colors[colorname]
+		if !exists {
+			fmt.Println("Usage: go run . [OPTION] [STRING]")
+		fmt.Println("EX: go run . --color=<color> <substring to be colored> 'something'")
+			return
+		}
+		
+	// Get the appropriate ASCII art file
+			artFile, err := asciiartcolor.GetArtFile(banner)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	// Read the ASCII art file
+	asciiArt, err := asciiartcolor.ReadArtFile(artFile)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+// Generate ASCII art for the input string and colorize the target word
+result := asciiartcolor.GenerateASCIIArt(input, asciiArt)
 
-	if len(args) == 3 {
+fmt.Print(colorCode + result + colors["reset"])
+
+	}else if len(args) == 3 {
 	color := args[0]
 	input := args[1]
 	banner := args[2]
 	// Validate output option
 	if !strings.HasPrefix(color, "--color=") {
-		fmt.Println("Invalid option. Please use --color= < name of the color >")
+		fmt.Println("Usage: go run . [OPTION] [STRING]")
+		fmt.Println("EX: go run . --color=<color> <substring to be colored> 'something'")
 		return
 	}
 	// Validate color name
@@ -41,7 +77,8 @@ func main() {
 	// Check if the color exists in the map
 	colorCode, exists := colors[colorname]
 	if !exists {
-		fmt.Println("Error: Invalid color name or format")
+		fmt.Println("Usage: go run . [OPTION] [STRING]")
+		fmt.Println("EX: go run . --color=<color> <substring to be colored> 'something'")
 		return
 	}
 	
@@ -80,7 +117,8 @@ fmt.Print(colorCode + result + colors["reset"])
 		colorname := strings.TrimPrefix(color, "--color=")
 		colorCode, exists := colors[colorname]
 		if !exists {
-			fmt.Println("Error: Invalid color name or format")
+			fmt.Println("Usage: go run . [OPTION] [STRING]")
+		fmt.Println("EX: go run . --color=<color> <substring to be colored> 'something'")
 			return
 		}
 		
@@ -102,10 +140,9 @@ result := asciiartcolor.GenerateASCIIArtLetter(input, asciiArt, word, colorCode,
 fmt.Print(result)
 
 	}else {
-		fmt.Println("Please enter this format: 'go run . [color] [a letter or word optionel ] [STRING] [BANNER]'")
+		fmt.Println("Usage: go run . [OPTION] [STRING]")
+		fmt.Println("EX: go run . --color=<color> <substring to be colored> 'something'")
+
 		return
 	}
-
-	
-
 }

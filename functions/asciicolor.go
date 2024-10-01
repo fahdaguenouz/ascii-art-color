@@ -76,37 +76,36 @@ func GenerateASCIIArtLetter(input string, asciiArt []string, targetWord string, 
 	var result string
 	lines := strings.Split(input, "\\n")
 
+	// Process each line
 	for _, line := range lines {
 		if line == "" {
 			result += "\n"
 			continue
 		}
-		for i := 1; i <= 8; i++ { // 8 lines per letter in the ASCII art
-			// Split the input line into words to match full words
-			words := strings.Fields(line)
 
-			for _, word := range words {
-				for _, r := range word {
-					if r < 32 || r > 126 {
-						fmt.Printf("invalid character: please enter a valid character between ASCII code 32 and 126")
-						return ""
-					}
-					index := 9*(int(r)-32) + i
-
-					// Check if the current word matches the target word
-					if word == targetWord {
-						// Apply the color to the entire word in ASCII art
-						result += colorCode + asciiArt[index] + resetCode
-					} else {
-						result += asciiArt[index] // No color for other words
-					}
+		// Loop through each line of ASCII art (8 lines per character)
+		for i := 1; i <= 8; i++ {
+			for _, r := range line {
+				if r < 32 || r > 126 {
+					fmt.Printf("invalid character: please enter a valid character between ASCII code 32 and 126")
+					return ""
 				}
-				result += " " // Add space between words in the result
+				index := 9*(int(r)-32) + i // Get the index of the ASCII art line for the character
+
+				// Check if the current character matches part of the targetWord
+				if strings.ContainsRune(targetWord, r) {
+					// Apply the color to the matched character
+					result += colorCode + asciiArt[index] + resetCode
+				} else {
+					// No match, just add the ASCII art without coloring
+					result += asciiArt[index]
+				}
 			}
-			result += "\n"
+			result += "\n" // Add newline after each set of ASCII lines
 		}
 	}
 
 	return result
 }
+
 

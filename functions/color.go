@@ -50,7 +50,7 @@ func AsciiColor(args []string) string {
 		input = args[1]
 		banner = args[2]
 
-		if banner != "standard" || banner != "shadow" || banner != "thinkertoy" {
+		if banner != "standard" && banner != "shadow" && banner != "thinkertoy" {
 			banner = "standard"
 			input=args[2]
 			word=args[1]
@@ -75,7 +75,6 @@ func AsciiColor(args []string) string {
 			// Generate the colored ASCII art for the specific word
 			result := GenerateASCIIArtLetter(input, asciiArt, word, colors[colorname], colors["reset"])
 			return result
-
 		} else {
 			colorname = strings.TrimPrefix(color, "--color=")
 
@@ -128,7 +127,6 @@ func AsciiColor(args []string) string {
 		return "Usage: go run . [OPTION] [STRING]\nEX: go run . --color=<color> <substring to be colored> 'something'\n "
 	}
 
-	fmt.Print(banner)
 
 	artFile, err := GetArtFile(banner)
 	if err != nil {

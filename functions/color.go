@@ -50,25 +50,53 @@ func AsciiColor(args []string) string {
 		input = args[1]
 		banner = args[2]
 
+		if banner != "standard" || banner != "shadow" || banner != "thinkertoy" {
+			banner = "standard"
+			input=args[2]
+			word=args[1]
+			colorname = strings.TrimPrefix(color, "--color=")
 
-		colorname = strings.TrimPrefix(color, "--color=")
+			// Validate color name
+			if _, exists := colors[colorname]; !exists {
+				return "Invalid color name.\n "
+			}
+			artFile, err := GetArtFile(banner)
+			if err != nil {
+				fmt.Println(err)
+				return ""
+			}
 
-		// Validate color name
-		if _, exists := colors[colorname]; !exists {
-			return "Invalid color name.\n "
+			asciiArt, err := ReadArtFile(artFile)
+			if err != nil {
+				fmt.Println(err)
+				return ""
+			}
+
+			// Generate the colored ASCII art for the specific word
+			result := GenerateASCIIArtLetter(input, asciiArt, word, colors[colorname], colors["reset"])
+			return result
+
+		} else {
+			colorname = strings.TrimPrefix(color, "--color=")
+
+			// Validate color name
+			if _, exists := colors[colorname]; !exists {
+				return "Invalid color name.\n "
+			}
+
+			// Validate banner
+			if banner != "standard" && banner != "thinkertoy" && banner != "shadow" {
+				return "Invalid banner name.\n "
+			}
+
 		}
 
-		// Validate banner
-		if banner != "standard" && banner != "thinkertoy" && banner != "shadow" {
-			return "Invalid banner name.\n "
-		}
 	case 4:
 		// Case: Input with color, word to be colored, and specific banner
 		color := args[0]
 		word = args[1]
 		input = args[2]
 		banner = args[3]
-
 
 		// Extract and validate color name
 		colorname = strings.TrimPrefix(color, "--color=")
@@ -82,16 +110,16 @@ func AsciiColor(args []string) string {
 		}
 
 		artFile, err := GetArtFile(banner)
-	if err != nil {
-		fmt.Println(err)
-		return ""
-	}
+		if err != nil {
+			fmt.Println(err)
+			return ""
+		}
 
-	asciiArt, err := ReadArtFile(artFile)
-	if err != nil {
-		fmt.Println(err)
-		return ""
-	}
+		asciiArt, err := ReadArtFile(artFile)
+		if err != nil {
+			fmt.Println(err)
+			return ""
+		}
 
 		// Generate the colored ASCII art for the specific word
 		result := GenerateASCIIArtLetter(input, asciiArt, word, colors[colorname], colors["reset"])
@@ -99,6 +127,9 @@ func AsciiColor(args []string) string {
 	default:
 		return "Usage: go run . [OPTION] [STRING]\nEX: go run . --color=<color> <substring to be colored> 'something'\n "
 	}
+
+	fmt.Print(banner)
+
 	artFile, err := GetArtFile(banner)
 	if err != nil {
 		fmt.Println(err)

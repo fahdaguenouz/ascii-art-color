@@ -20,8 +20,11 @@ if len(args)==1{
 	fmt.Print(result)
 	return
 }else if len(args)==2{
-    
-if strings.HasPrefix(args[0], "--color="){
+
+	if (strings.HasPrefix(args[0], "--color=")&&strings.HasPrefix(args[1], "--output="))||(strings.HasPrefix(args[1], "--color=")&&strings.HasPrefix(args[0], "--output=")){
+		fmt.Println("Usage: go run . [OPTION] [STRING]\nEX: go run . --color=<color> <substring to be colored> 'something' ")
+	
+	} else if strings.HasPrefix(args[0], "--color="){
 
 	result := asciiartcolor.AsciiColor(args)
 	fmt.Print(result)
@@ -38,7 +41,6 @@ if strings.HasPrefix(args[0], "--color="){
     fmt.Print(result)
     return
 }else {
-
 	fmt.Println("Usage: go run . [OPTION] [STRING]\nEX: go run . --color=<color> <substring to be colored> 'something' ")
 
     return
@@ -47,7 +49,10 @@ if strings.HasPrefix(args[0], "--color="){
 
 }else if len(args)==3{
 
-	if strings.HasPrefix(args[0], "--color="){
+	if (strings.HasPrefix(args[0], "--color=")&&strings.HasPrefix(args[1], "--output="))||(strings.HasPrefix(args[1], "--color=")&&strings.HasPrefix(args[0], "--output=")){
+		fmt.Println("Usage: go run . [OPTION] [STRING]\nEX: go run . --color=<color> <substring to be colored> 'something'")
+	
+	} else if strings.HasPrefix(args[0], "--color="){
 		result := asciiartcolor.AsciiColor(args)
 		fmt.Print(result)
 		return
@@ -61,7 +66,11 @@ if strings.HasPrefix(args[0], "--color="){
 	}
 
 }else if len(args)==4{
-	if strings.HasPrefix(args[0], "--color="){
+
+	if (strings.HasPrefix(args[0], "--color=")&&strings.HasPrefix(args[1], "--output="))||(strings.HasPrefix(args[1], "--color=")&&strings.HasPrefix(args[0], "--output=")){
+		fmt.Println("Usage: go run . [OPTION] [STRING]\nEX: go run . --color=<color> <substring to be colored> 'something'")
+	
+	} else if strings.HasPrefix(args[0], "--color="){
 		result := asciiartcolor.AsciiColor(args)
 		fmt.Print(result)
 		return
